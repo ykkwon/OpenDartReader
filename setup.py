@@ -10,7 +10,7 @@ setup(
     packages=find_packages(include=['OpenDartReader']),
     # packages=find_packages(where='src'),
     # package_dir={'': 'src'},
-    # packages=['OpenDartReader'],
+    packages=['OpenDartReader'],
     author="https://github.com/FinanceData/OpenDartReader",
     # py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
     install_requires=['requests'],
