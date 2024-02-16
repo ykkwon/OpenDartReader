@@ -7,7 +7,7 @@ setup(
     name='OpenDartReader',
     version='0.1.0',
     url="https://github.com/ykkwon/OpenDartReader.git",
-    packages=find_packages(include=['OpenDartReader']),
+    packages=find_packages(),
     # packages=find_packages(where='src'),
     # package_dir={'': 'src'},
     packages=['OpenDartReader'],
