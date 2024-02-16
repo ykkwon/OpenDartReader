@@ -12,13 +12,22 @@ import pandas as pd
 import warnings
 import xml.etree.ElementTree as ET
 from datetime import datetime
-from . import dart_list
-from . import dart_report
-from . import dart_finstate
-from . import dart_share
-from . import dart_event
-from . import dart_regstate
-from . import dart_utils
+try:
+    from . import dart_list
+    from . import dart_report
+    from . import dart_finstate
+    from . import dart_share
+    from . import dart_event
+    from . import dart_regstate
+    from . import dart_utils
+except:
+    import dart_list
+    import dart_report
+    import dart_finstate
+    import dart_share
+    import dart_event
+    import dart_regstate
+    import dart_utils
 
 class OpenDartReader():
     # init corp_codes (회사 고유번호 데이터)

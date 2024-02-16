@@ -4,6 +4,10 @@
 import requests
 import json
 import pandas as pd
+try:    
+    from . import fetch
+except:
+    import fetch
 
 def report(api_key, corp_code, key_word, bsns_year, reprt_code='11011'):
     key_word_map = {
@@ -47,7 +51,8 @@ def report(api_key, corp_code, key_word, bsns_year, reprt_code='11011'):
         'bsns_year': bsns_year,   # 사업년도
         'reprt_code': reprt_code, # 보고서 코드 ("11011"=사업보고서)
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url,params=params)
     jo = r.json()
     
     if jo['status'] != '000' or 'list' not in jo:

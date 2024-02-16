@@ -6,6 +6,10 @@ import zipfile
 import requests
 import xml.etree.ElementTree as ET
 import pandas as pd
+try:    
+    from . import fetch
+except:
+    import fetch
 
 # 3-1 상장기업 재무정보 (단일회사): api/fnlttSinglAcnt.json
 # 3-2 상장기업 재무정보 (다중회사): api/fnlttMultiAcnt.json
@@ -20,7 +24,8 @@ def finstate(api_key, corp_code, bsns_year, reprt_code='11011'):
         'reprt_code': reprt_code, # "11011": 사업보고서
     }
 
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url,params=params)
     jo = r.json() 
     if 'list' not in jo:
         print(jo)
@@ -36,7 +41,8 @@ def finstate_xml(api_key, rcp_no, save_as='finstate_xml.zip', reprt_code='11011'
         'rcept_no': rcp_no,
         'reprt_code': reprt_code, # "11013"=1분기보고서,  "11012"=반기보고서,  "11014"=3분기보고서, "11011"=사업보고서
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url,params=params)
     try:
         tree = ET.XML(r.content)
         status = tree.find('status').text,
@@ -61,7 +67,8 @@ def finstate_all(api_key, corp_code, bsns_year, reprt_code='11011', fs_div='CFS'
         'fs_div': fs_div, # 'CFS'=연결제무제표, 'OFS'=별도(개별)제무제표
     }
 
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url,params=params)
     jo = r.json() 
     if 'list' not in jo:
         print(jo)
@@ -76,7 +83,8 @@ def xbrl_taxonomy(api_key, sj_div='BS1'):
         'crtfc_key': api_key,
         'sj_div': sj_div, # "CFS":연결재무제표, "OFS":재무제표
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url,params=params)
     jo = r.json() 
     if 'list' not in jo:
         print(jo)

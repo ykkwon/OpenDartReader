@@ -8,6 +8,10 @@ import os
 import pandas as pd
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
+try:
+    from . import fetch 
+except:
+    import fetch
 
 # 1. 공시정보 - 공시검색(목록)
 def list(api_key, corp_code='', start=None, end=None, kind='', kind_detail='', final=False):
@@ -29,7 +33,8 @@ def list(api_key, corp_code='', start=None, end=None, kind='', kind_detail='', f
     if kind_detail:
         params['pblntf_detail_ty'] = kind_detail
 
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url, params=params)
     try:
         tree = ET.XML(r.content)
         status = tree.find('status').text
@@ -63,7 +68,8 @@ def company(api_key, corp_code):
         'crtfc_key': api_key,
         'corp_code': corp_code,
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url, params=params)
     try:
         tree = ET.XML(r.content)
         status = tree.find('status').text,
@@ -84,7 +90,8 @@ def company_by_name(api_key, corp_code_list):
     company_list = []
     for corp_code in corp_code_list:
         params['corp_code'] = corp_code
-        r = requests.get(url, params=params)
+        # r = requests.get(url, params=params)
+        r = fetch.get(url, params=params)
         company_list.append(r.json())
     return company_list
 
@@ -97,7 +104,8 @@ def document(api_key, rcp_no, cache=True):
         'rcept_no': rcp_no,
     }
 
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url, params=params)
     try:
         tree = ET.XML(r.text)
         status = tree.find('status').text
@@ -130,7 +138,8 @@ def document_all(api_key, rcp_no, cache=True):
         'rcept_no': rcp_no,
     }
 
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url, params=params)
     try:
         tree = ET.XML(r.text)
         status = tree.find('status').text
@@ -161,7 +170,8 @@ def corp_codes(api_key):
         url = 'https://opendart.fss.or.kr/api/corpCode.xml'
         params = { 'crtfc_key': api_key, }
 
-        r = requests.get(url, params=params)
+        # r = requests.get(url, params=params)
+        r = fetch.get(url, params=params)
         try:
             tree = ET.XML(r.content)
             status = tree.find('status').text

@@ -12,6 +12,10 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import json
 import difflib
+try:    
+    from . import fetch
+except:
+    import fetch
 
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.3904.108 Safari/537.36'
 
@@ -33,7 +37,8 @@ def _requests_get_cache(url, headers=None):
     fn = os.path.join(docs_cache_dir, quote_plus(url))
     if not os.path.isfile(fn) or os.path.getsize(fn) == 0:
         with open(fn, 'wt') as f:
-            r = requests.get(url, headers=headers)
+            # r = requests.get(url, headers=headers)
+            r = fetch.get(url, headers=headers)
             f.write(r.text)
             xhtml_text = r.text
     else:
@@ -58,7 +63,8 @@ def list_date_ex(date=None, cache=True):
         time.sleep(0.1)
         url = f'http://dart.fss.or.kr/dsac001/search.ax?selectDate={date_str}&pageGrouping=A&currentPage={page}'
         headers = {'User-Agent': USER_AGENT}
-        xhtml_text = _requests_get_cache(url, headers=headers) if cache else requests.get(url, headers).text
+        # xhtml_text = _requests_get_cache(url, headers=headers) if cache else requests.get(url, headers).text
+        xhtml_text = _requests_get_cache(url, headers=headers) if cache else fetch.get(url, headers=headers).text
 
         if '검색된 자료가 없습니다' in xhtml_text:
             if page == 1:
@@ -96,9 +102,11 @@ def sub_docs(rcp_no, match=None):
     * match: 매칭할 문자열 (문자열을 지정하면 문서 제목과 가장 유사한 순서로 소트 합니다)
     '''
     if rcp_no.isdecimal():
-        r = requests.get(f'http://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcp_no}', headers={'User-Agent': USER_AGENT})
+        # r = requests.get(f'http://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcp_no}', headers={'User-Agent': USER_AGENT})
+        r = fetch.get(f'http://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcp_no}', headers={'User-Agent': USER_AGENT})
     elif rcp_no.startswith('http'):
-        r = requests.get(rcp_no, headers={'User-Agent': USER_AGENT})
+        # r = requests.get(rcp_no, headers={'User-Agent': USER_AGENT})
+        r = fetch.get(rcp_no, headers={'User-Agent': USER_AGENT})
     else:
         raise ValueError('invalid `rcp_no`(or url)')
         
@@ -149,7 +157,8 @@ def attach_docs(rcp_no, match=None):
     * rcp_no: 접수번호
     * match: 문서 제목과 가장 유사한 순서로 소트
     '''
-    r = requests.get(f'http://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcp_no}', headers={'User-Agent': USER_AGENT})
+    # r = requests.get(f'http://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcp_no}', headers={'User-Agent': USER_AGENT})
+    r = fetch.get(f'http://dart.fss.or.kr/dsaf001/main.do?rcpNo={rcp_no}', headers={'User-Agent': USER_AGENT})
     soup = BeautifulSoup(r.text, features="lxml")
 
     row_list = []
@@ -177,7 +186,8 @@ def attach_files(arg): # rcp_no or URL
     * rcp_no: 접수번호를 지정합니다. rcp_no 대신 첨부문서의 URL(http로 시작)을 사용할 수 도 있습니다.
     '''
     url= arg if arg.startswith('http') else f"http://dart.fss.or.kr/dsaf001/main.do?rcpNo={arg}"
-    r = requests.get(url, headers={'User-Agent': USER_AGENT})
+    # r = requests.get(url, headers={'User-Agent': USER_AGENT})
+    r = fetch.get(url, headers={'User-Agent': USER_AGENT})
 
     rcp_no = dcm_no = None
     matches = re.findall(
@@ -191,7 +201,8 @@ def attach_files(arg): # rcp_no or URL
         print(f'{url} does not have download page. 다운로드 페이지를 포함하고 있지 않습니다.')
 
     download_url = f'http://dart.fss.or.kr/pdf/download/main.do?rcp_no={rcp_no}&dcm_no={dcm_no}'
-    r = requests.get(download_url, headers={'User-Agent': USER_AGENT})
+    # r = requests.get(download_url, headers={'User-Agent': USER_AGENT})
+    r = fetch.get(download_url, headers={'User-Agent': USER_AGENT})
     soup = BeautifulSoup(r.text, features="lxml")
     table = soup.find('table')
     if not table:
@@ -208,7 +219,8 @@ def attach_files(arg): # rcp_no or URL
 
 def download(url, fn=None):
     fn = fn if fn else url.split('/')[-1]
-    r = requests.get(url, stream=True, headers={'User-Agent': USER_AGENT})
+    # r = requests.get(url, stream=True, headers={'User-Agent': USER_AGENT})
+    r = fetch.get(url, stream=True, headers={'User-Agent': USER_AGENT})
     if r.status_code != 200:
         print(r.status_code)
         return None

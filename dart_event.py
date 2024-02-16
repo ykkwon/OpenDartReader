@@ -5,6 +5,10 @@ import requests
 import json
 import pandas as pd
 from datetime import datetime, timedelta
+try:    
+    from . import fetch
+except:
+    import fetch
 
 def event(api_key, corp_code, key_word, start=None, end=None):
     start = pd.to_datetime(start) if start else pd.to_datetime('1900-01-01')
@@ -59,7 +63,8 @@ def event(api_key, corp_code, key_word, start=None, end=None):
         'bgn_de': start.strftime('%Y%m%d'),  # 시작일(최초접수일)
         'end_de': end.strftime('%Y%m%d'), # 종료일(최초접수일)
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url,params=params)
     jo = r.json()
     
     if jo['status'] != '000' or 'list' not in jo:

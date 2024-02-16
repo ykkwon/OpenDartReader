@@ -1,6 +1,10 @@
 import requests
 import json
 import pandas as pd
+try:    
+    from . import fetch
+except:
+    import fetch
 
 # 대량보유 상황보고
 def major_shareholders(api_key, corp_code):
@@ -10,7 +14,8 @@ def major_shareholders(api_key, corp_code):
         'corp_code': corp_code,
     }
 
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = fetch.get(url,params=params)
     jo = json.loads(r.text)
     if jo['status'] != '000' or 'list' not in jo:
         print(jo)
