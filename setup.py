@@ -6,10 +6,11 @@ from setuptools import find_packages, setup
 setup(
     name='OpenDartReader',
     version='0.1.0',
-    # url="https://github.com/ykkwon/OpenDartReader.git",
+    url="https://github.com/ykkwon/OpenDartReader.git",
     packages=find_packages(include=['OpenDartReader']),
     # packages=find_packages(where='src'),
     # package_dir={'': 'src'},
+    packages=['OpenDartReader'],
     author="https://github.com/FinanceData/OpenDartReader",
     # py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
     install_requires=['requests'],
