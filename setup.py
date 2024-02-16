@@ -5,7 +5,6 @@ from setuptools import find_packages, setup
 
 setup(
     name='OpenDartReader',
-    version='0.1',
     url="https://github.com/ykkwon/OpenDartReader.git",
     packages=find_packages(),
     # packages=find_packages(where='src'),
